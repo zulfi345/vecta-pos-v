@@ -22,7 +22,7 @@ class AuthRemoteDataSourceImpl implements AuthDataSource {
   Future<Result<UserModel>> signInWithGoogle() async {
     try {
       await googleSignIn.initialize(
-        clientId: PlatformWrapper().isIOS ? DefaultFirebaseOptions.ios.iosClientId : null,
+
         serverClientId: Constants.googleServerClientId,
       );
 
