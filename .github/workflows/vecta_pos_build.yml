@@ -37,6 +37,16 @@ jobs:
             echo "$FIREBASE_OPTIONS_DART" | base64 -d > lib/firebase_options.dart
           fi
 
+      - name: Restore signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > android/app/vecta-release.jks
+            printf 'storePassword=%s\nkeyPassword=%s\nkeyAlias=vecta\nstoreFile=vecta-release.jks\n' "$KEYSTORE_PASSWORD" "$KEYSTORE_PASSWORD" > android/key.properties
+          fi
+
       - name: Install Dependencies
         run: flutter pub get
 
