@@ -30,15 +30,32 @@ jobs:
         run: |
           if [ -n "$GOOGLE_SERVICES_JSON" ]; then
             echo "$GOOGLE_SERVICES_JSON" | base64 -d > android/app/google-services.json
+            echo "SECRET google-services: TERPAKAI"
           else
             echo '{"project_info":{"project_number":"123456789","project_id":"vecta-pos","storage_bucket":"vecta-pos.appspot.com"},"client":[{"client_info":{"mobilesdk_app_id":"1:123456789:android:123456789","android_client_info":{"package_name":"com.elriztechnology.flutter_pos"}},"oauth_client":[],"api_key":[{"current_key":"placeholder-key"}],"services":{"appinvite_service":{"other_platform_oauth_client":[]}}}],"configuration_version":"1"}' > android/app/google-services.json
+            echo "SECRET google-services: KOSONG, pakai PLACEHOLDER"
           fi
           if [ -n "$FIREBASE_OPTIONS_DART" ]; then
             echo "$FIREBASE_OPTIONS_DART" | base64 -d > lib/firebase_options.dart
+            echo "SECRET firebase_options: TERPAKAI"
+          else
+            echo "SECRET firebase_options: KOSONG, pakai file di repo (PLACEHOLDER)"
           fi
 
       - name: Install Dependencies
         run: flutter pub get
+
+      - name: Diagnostik (tanpa data rahasia)
+        run: |
+          echo "--- firebase_options ---"
+          grep -n "projectId\|appId\|messagingSenderId" lib/firebase_options.dart
+          echo "--- google-services ---"
+          grep -n "package_name\|project_id\|mobilesdk_app_id" android/app/google-services.json
+          echo "--- versi plugin ---"
+          grep -A1 "^  firebase_auth:\|^  firebase_core:\|^  google_sign_in:\|^  google_sign_in_android:" pubspec.lock | grep "version"
+          flutter --version | head -2
+          echo "--- client id terisi? ---"
+          [ -n "${{ secrets.GOOGLE_SERVER_CLIENT_ID }}" ] && echo "GOOGLE_SERVER_CLIENT_ID: TERISI" || echo "GOOGLE_SERVER_CLIENT_ID: KOSONG"
 
       - name: Build Android APK
         env:
