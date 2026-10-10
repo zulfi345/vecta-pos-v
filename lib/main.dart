@@ -17,7 +17,6 @@ void main() async {
 
   // Initialize Firebase (use `flutterfire configure` to generate the options)
   await Firebase.initializeApp(
-    name: DefaultFirebaseOptions.currentPlatform.projectId,
     options: DefaultFirebaseOptions.currentPlatform,
   );
 

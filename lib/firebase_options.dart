@@ -1,25 +1,22 @@
-// File konfigurasi Firebase otomatis untuk build APK
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
-import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, TargetPlatform;
 
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
-    return android;
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return android;
+      default:
+        throw UnsupportedError('Platform tidak didukung');
+    }
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDummyKeyForBuild123456789',
-    appId: '1:123456789:android:123456789',
-    messagingSenderId: '123456789',
+    apiKey: 'AIzaSyCBcF3tLcNiQX9rpFMqw7lBKEQ6UAgWLVQ',
+    appId: '1:278717955661:android:98eebc382580800416e604',
+    messagingSenderId: '278717955661',
     projectId: 'vecta-pos',
-    storageBucket: 'vecta-pos.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDummyKeyForBuild123456789',
-    appId: '1:123456789:ios:123456789',
-    messagingSenderId: '123456789',
-    projectId: 'vecta-pos',
-    storageBucket: 'vecta-pos.appspot.com',
+    storageBucket: 'vecta-pos.firebasestorage.app',
   );
 }
