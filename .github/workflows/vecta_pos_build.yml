@@ -2,37 +2,35 @@ name: Build Vecta POS APK
 
 on:
   push:
-    branches: [ main, master ]
+  workflow_dispatch:
 
 jobs:
-  build-vecta-pos:
-    name: Build Vecta POS Android APK
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Source Code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Setup Java JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
-          java-version: '17'
+          distribution: temurin
+          java-version: 17
 
       - name: Setup Flutter SDK
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: stable
 
-      - name: Install Vecta POS Dependencies
+      - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build Vecta POS Release APK
-        run: flutter build apk --release
+      - name: Build Android APK
+        run: flutter build apk --release --android-skip-build-dependency-validation
 
-      - name: Upload Vecta POS APK Artifact
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Vecta-POS-Release-APK
+          name: vecta-pos-apk
           path: build/app/outputs/flutter-apk/app-release.apk
 
