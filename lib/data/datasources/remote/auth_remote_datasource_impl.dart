@@ -22,22 +22,17 @@ class AuthRemoteDataSourceImpl implements AuthDataSource {
   Future<Result<UserModel>> signInWithGoogle() async {
     try {
       await googleSignIn.initialize(
-
         serverClientId: Constants.googleServerClientId,
       );
 
-      final googleSignInAccount = await googleSignIn.attemptLightweightAuthentication();
+      final googleSignInAccount = await googleSignIn.authenticate();
+      final idToken = googleSignInAccount.authentication.idToken;
 
-      final googleSignInAuthentication = googleSignInAccount?.authentication;
+      if (idToken == null) {
+        return Result.failure(error: 'idToken kosong, cek GOOGLE_SERVER_CLIENT_ID');
+      }
 
-      final googleSignInAuthorization = await googleSignInAccount?.authorizationClient.authorizationForScopes(
-        Constants.authScopes,
-      );
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthorization?.accessToken,
-        idToken: googleSignInAuthentication?.idToken,
-      );
+      final credential = GoogleAuthProvider.credential(idToken: idToken);
 
       final userCredential = await firebaseAuth.signInWithCredential(credential);
 
