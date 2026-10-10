@@ -187,7 +187,7 @@ class PrinterService {
       final ticket = await Ticket.create(paperSize);
 
       ticket.text(
-        'FLUTTER POS',
+        'VECTA POS',
         align: PrintAlign.center,
         style: const PrintTextStyle(
           bold: true,
@@ -196,7 +196,7 @@ class PrinterService {
         ),
       );
       ticket.text(
-        'https://github.com/elrizwiraswara/flutter_pos',
+        'https://github.com/zulfi345/vecta-pos-v',
         align: PrintAlign.center,
         style: PrintTextStyle(
           fontType: FontType.fontB,
@@ -340,7 +340,7 @@ class PrinterService {
       ticket.emptyLines(3);
 
       ticket.text(
-        'FLUTTER POS PRINT TEST OK',
+        'VECTA POS PRINT TEST OK',
         align: PrintAlign.center,
         style: const PrintTextStyle(bold: true),
       );

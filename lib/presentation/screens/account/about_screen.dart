@@ -54,7 +54,7 @@ class _AboutScreenState extends State<AboutScreen> {
               ),
               const SizedBox(height: AppSizes.padding),
               Text(
-                'Flutter POS',
+                'Vecta POS',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               Text(
@@ -97,7 +97,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    "Elriz Wiraswara",
+                    "Vecta Technology Group",
                     textAlign: TextAlign.justify,
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       fontWeight: FontWeight.bold,
@@ -129,7 +129,7 @@ class _AboutScreenState extends State<AboutScreen> {
                     ],
                   ),
                   onTap: () {
-                    ExternalLauncher.openUrl('https://github.com/elrizwiraswara');
+                    ExternalLauncher.openUrl('https://github.com/zulfi345');
                   },
                 ),
               ),
@@ -157,7 +157,7 @@ class _AboutScreenState extends State<AboutScreen> {
                     ],
                   ),
                   onTap: () {
-                    ExternalLauncher.openUrl('https://elriztechnology.com');
+                    ExternalLauncher.openUrl('https://github.com/zulfi345/vecta-pos-v');
                   },
                 ),
               ),

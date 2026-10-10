@@ -52,7 +52,7 @@ class _WelcomeMessage extends StatelessWidget {
               ),
             ),
             Text(
-              'Welcome to Flutter POS app',
+              'Welcome to Vecta POS',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
