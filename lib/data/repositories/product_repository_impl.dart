@@ -151,7 +151,7 @@ class ProductRepositoryImpl extends ProductRepository {
       } else {
         final res = await queuedActionLocalDatasource.createQueuedAction(
           QueuedActionModel(
-            id: DateTime.now().millisecond,
+            id: DateTime.now().millisecondsSinceEpoch,
             repository: 'ProductRepositoryImpl',
             method: 'createProduct',
             param: jsonEncode((data).toJson()),
@@ -181,7 +181,7 @@ class ProductRepositoryImpl extends ProductRepository {
       } else {
         final res = await queuedActionLocalDatasource.createQueuedAction(
           QueuedActionModel(
-            id: DateTime.now().millisecond,
+            id: DateTime.now().millisecondsSinceEpoch,
             repository: 'ProductRepositoryImpl',
             method: 'deleteProduct',
             param: productId.toString(),
@@ -211,7 +211,7 @@ class ProductRepositoryImpl extends ProductRepository {
       } else {
         final res = await queuedActionLocalDatasource.createQueuedAction(
           QueuedActionModel(
-            id: DateTime.now().millisecond,
+            id: DateTime.now().millisecondsSinceEpoch,
             repository: 'ProductRepositoryImpl',
             method: 'updateProduct',
             param: jsonEncode(ProductModel.fromEntity(product).toJson()),

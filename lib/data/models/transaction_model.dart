@@ -40,7 +40,9 @@ class TransactionModel {
       customerName: json['customerName'],
       description: json['description'],
       createdById: json['createdById'],
-      createdBy: json['createdBy'],
+      createdBy: json['createdBy'] is Map<String, dynamic>
+          ? UserModel.fromJson(json['createdBy'] as Map<String, dynamic>)
+          : null,
       orderedProducts: json['orderedProducts'] != null
           ? (json['orderedProducts'] as List).map((e) => OrderedProductModel.fromJson(e)).toList()
           : null,

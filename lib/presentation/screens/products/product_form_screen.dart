@@ -345,7 +345,7 @@ class _CreateOrUpdateButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isFormValid = ref.watch(
       productFormNotifierProvider.select((s) {
-        return (s.name?.isNotEmpty ?? false) && (s.price ?? 0) > 0 && (s.stock ?? 0) > 0;
+        return (s.name?.isNotEmpty ?? false) && (s.price ?? 0) > 0 && s.stock != null;
       }),
     );
 

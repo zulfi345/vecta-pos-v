@@ -55,15 +55,23 @@ class AccountNotifier extends AutoDisposeNotifier<AccountFormState> {
 
       if (state.imageFile != null) {
         final res = await UploadUserPhotoUsecase(storageRepository).call(state.imageFile!.path);
+        if (res.isFailure) return Result.failure(error: res.error!);
+
         imageUrl = res.data;
       }
+
+      final current = await GetUserUsecase(userRepository).call(userId);
 
       var user = UserEntity(
         id: userId,
         email: state.email,
         phone: state.phone,
         name: state.name!,
+        gender: current.data?.gender,
+        birthdate: current.data?.birthdate,
         imageUrl: imageUrl ?? '',
+        authProvider: current.data?.authProvider,
+        createdAt: current.data?.createdAt,
       );
 
       var res = await UpateUserUsecase(userRepository).call(user);

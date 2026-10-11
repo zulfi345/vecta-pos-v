@@ -58,6 +58,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           .read(productsNotifierProvider.notifier)
           .getAllProducts(
             offset: productsState.allProducts?.length,
+            contains: searchFieldController.text.isEmpty ? null : searchFieldController.text,
           );
     }
   }

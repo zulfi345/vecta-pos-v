@@ -63,6 +63,8 @@ class ProductFormNotifier extends AutoDisposeNotifier<ProductFormState> {
 
       if (state.imageFile != null) {
         final res = await UploadProductImageUsecase(storageRepository).call(state.imageFile!.path);
+        if (res.isFailure) return Result.failure(error: res.error!);
+
         imageUrl = res.data;
       }
 
@@ -98,10 +100,14 @@ class ProductFormNotifier extends AutoDisposeNotifier<ProductFormState> {
 
       if (state.imageFile != null) {
         final res = await UploadProductImageUsecase(storageRepository).call(state.imageFile!.path);
+        if (res.isFailure) return Result.failure(error: res.error!);
+
         imageUrl = res.data;
       }
 
       cl('imageUrl $imageUrl');
+
+      final current = await GetProductUsecase(productRepository).call(id);
 
       var product = ProductEntity(
         id: id,
@@ -109,8 +115,10 @@ class ProductFormNotifier extends AutoDisposeNotifier<ProductFormState> {
         name: state.name!,
         imageUrl: imageUrl ?? '',
         stock: state.stock ?? 0,
+        sold: current.data?.sold,
         price: state.price ?? 0,
         description: state.description ?? '',
+        createdAt: current.data?.createdAt,
       );
 
       var res = await UpdateProductUsecase(productRepository).call(product);

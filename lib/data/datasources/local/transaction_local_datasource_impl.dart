@@ -100,12 +100,23 @@ class TransactionLocalDatasourceImpl extends TransactionDatasource {
 
           for (var orderedProduct in transaction.orderedProducts!) {
             // Update ordered product - Added proper where clause
+            var rawExisting = await trx.query(
+              DatabaseConfig.orderedProductTableName,
+              where: 'id = ?',
+              whereArgs: [orderedProduct.id],
+            );
+
             batch.update(
               DatabaseConfig.orderedProductTableName,
               orderedProduct.toJson(),
               where: 'id = ?',
               whereArgs: [orderedProduct.id],
             );
+
+            if (rawExisting.isEmpty) continue;
+
+            final quantityDiff = orderedProduct.quantity - OrderedProductModel.fromJson(rawExisting.first).quantity;
+            if (quantityDiff == 0) continue;
 
             // Get product
             var rawProduct = await trx.query(
@@ -119,8 +130,8 @@ class TransactionLocalDatasourceImpl extends TransactionDatasource {
             var product = ProductModel.fromJson(rawProduct.first);
 
             // Update product stock and sold
-            int stock = product.stock - orderedProduct.quantity;
-            int sold = product.sold + orderedProduct.quantity;
+            int stock = product.stock - quantityDiff;
+            int sold = product.sold + quantityDiff;
 
             batch.update(
               DatabaseConfig.productTableName,
