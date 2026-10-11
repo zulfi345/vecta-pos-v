@@ -1,6 +1,6 @@
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter_pos/core/services/info/device_info_service.dart';
-import 'package:flutter_pos/core/utilities/platform_wrapper.dart';
+import 'package:vecta_pos/core/services/info/device_info_service.dart';
+import 'package:vecta_pos/core/utilities/platform_wrapper.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

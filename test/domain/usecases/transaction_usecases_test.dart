@@ -1,8 +1,8 @@
-import 'package:flutter_pos/core/common/result.dart';
-import 'package:flutter_pos/domain/entities/transaction_entity.dart';
-import 'package:flutter_pos/domain/repositories/transaction_repository.dart';
-import 'package:flutter_pos/domain/usecases/params/base_params.dart';
-import 'package:flutter_pos/domain/usecases/transaction_usecases.dart';
+import 'package:vecta_pos/core/common/result.dart';
+import 'package:vecta_pos/domain/entities/transaction_entity.dart';
+import 'package:vecta_pos/domain/repositories/transaction_repository.dart';
+import 'package:vecta_pos/domain/usecases/params/base_params.dart';
+import 'package:vecta_pos/domain/usecases/transaction_usecases.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

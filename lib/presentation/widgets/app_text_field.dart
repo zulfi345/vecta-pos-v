@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart' hide Text;
-import 'package:flutter_pos/core/i18n/tr_text.dart';
+import 'package:vecta_pos/core/i18n/tr_text.dart';
 import 'package:flutter/services.dart';
 
 import '../../core/i18n/app_lang.dart';

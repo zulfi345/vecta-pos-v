@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:flutter_pos/data/datasources/remote/auth_remote_datasource_impl.dart';
-import 'package:flutter_pos/data/models/user_model.dart';
+import 'package:vecta_pos/data/datasources/remote/auth_remote_datasource_impl.dart';
+import 'package:vecta_pos/data/models/user_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mockito/annotations.dart';

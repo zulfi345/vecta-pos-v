@@ -5,9 +5,9 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
-import 'package:flutter_pos/core/common/result.dart' as _i4;
-import 'package:flutter_pos/domain/entities/user_entity.dart' as _i5;
-import 'package:flutter_pos/domain/repositories/auth_repository.dart' as _i2;
+import 'package:vecta_pos/core/common/result.dart' as _i4;
+import 'package:vecta_pos/domain/entities/user_entity.dart' as _i5;
+import 'package:vecta_pos/domain/repositories/auth_repository.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i6;
 

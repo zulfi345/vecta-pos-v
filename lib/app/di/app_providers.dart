@@ -1,6 +1,5 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,7 +31,6 @@ final sharedPreferencesProvider = Provider<SharedPreferences>(
 );
 
 // Third parties
-final firebaseCrashlyticsProvider = Provider<FirebaseCrashlytics>((ref) => FirebaseCrashlytics.instance);
 final firebaseAuthProvider = Provider<FirebaseAuth>((ref) => FirebaseAuth.instance);
 final googleSignInProvider = Provider<GoogleSignIn>((ref) => GoogleSignIn.instance);
 final deviceInfoPluginProvider = Provider<DeviceInfoPlugin>((ref) => DeviceInfoPlugin());
@@ -45,9 +43,7 @@ final databaseServiceProvider = Provider<DatabaseService>((ref) => DatabaseServi
 final deviceInfoServiceProvider = Provider<DeviceInfoService>(
   (ref) => DeviceInfoService(ref.watch(deviceInfoPluginProvider)),
 );
-final errorLoggerServiceProvider = Provider<ErrorLoggerService>(
-  (ref) => ErrorLoggerService(ref.watch(firebaseCrashlyticsProvider)),
-);
+final errorLoggerServiceProvider = Provider<ErrorLoggerService>((ref) => ErrorLoggerService());
 final printerServiceProvider = Provider<PrinterService>(
   (ref) => PrinterService(ref.watch(sharedPreferencesProvider)),
 );

@@ -1,6 +1,6 @@
 import 'package:app_image/app_image.dart';
 import 'package:flutter/material.dart' hide Text;
-import 'package:flutter_pos/core/i18n/tr_text.dart';
+import 'package:vecta_pos/core/i18n/tr_text.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../core/assets/assets.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Text;
-import 'package:flutter_pos/core/i18n/tr_text.dart';
+import 'package:vecta_pos/core/i18n/tr_text.dart';
 
 import '../../app/routes/app_routes.dart';
 import '../../core/themes/app_sizes.dart';

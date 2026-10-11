@@ -1,4 +1,4 @@
-import 'package:flutter_pos/core/common/result.dart';
+import 'package:vecta_pos/core/common/result.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/remote/auth_remote_datasource_impl.dart';

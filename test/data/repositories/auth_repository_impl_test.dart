@@ -1,8 +1,8 @@
-import 'package:flutter_pos/core/common/result.dart';
-import 'package:flutter_pos/data/datasources/remote/auth_remote_datasource_impl.dart';
-import 'package:flutter_pos/data/models/user_model.dart';
-import 'package:flutter_pos/data/repositories/auth_repository_impl.dart';
-import 'package:flutter_pos/domain/entities/user_entity.dart';
+import 'package:vecta_pos/core/common/result.dart';
+import 'package:vecta_pos/data/datasources/remote/auth_remote_datasource_impl.dart';
+import 'package:vecta_pos/data/models/user_model.dart';
+import 'package:vecta_pos/data/repositories/auth_repository_impl.dart';
+import 'package:vecta_pos/domain/entities/user_entity.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

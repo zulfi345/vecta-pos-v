@@ -6,10 +6,10 @@
 import 'dart:async' as _i6;
 
 import 'package:firebase_auth/firebase_auth.dart' as _i2;
-import 'package:flutter_pos/core/common/result.dart' as _i7;
-import 'package:flutter_pos/data/datasources/remote/auth_remote_datasource_impl.dart' as _i5;
-import 'package:flutter_pos/data/models/user_model.dart' as _i8;
-import 'package:flutter_pos/domain/entities/user_entity.dart' as _i4;
+import 'package:vecta_pos/core/common/result.dart' as _i7;
+import 'package:vecta_pos/data/datasources/remote/auth_remote_datasource_impl.dart' as _i5;
+import 'package:vecta_pos/data/models/user_model.dart' as _i8;
+import 'package:vecta_pos/domain/entities/user_entity.dart' as _i4;
 import 'package:google_sign_in/google_sign_in.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i9;

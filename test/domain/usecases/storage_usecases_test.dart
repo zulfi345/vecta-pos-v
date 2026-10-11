@@ -1,6 +1,6 @@
-import 'package:flutter_pos/core/common/result.dart';
-import 'package:flutter_pos/domain/repositories/storage_repository.dart';
-import 'package:flutter_pos/domain/usecases/storage_usecases.dart';
+import 'package:vecta_pos/core/common/result.dart';
+import 'package:vecta_pos/domain/repositories/storage_repository.dart';
+import 'package:vecta_pos/domain/usecases/storage_usecases.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:app_image/app_image.dart';
 import 'package:flutter/material.dart' hide Text;
-import 'package:flutter_pos/core/i18n/tr_text.dart';
+import 'package:vecta_pos/core/i18n/tr_text.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';

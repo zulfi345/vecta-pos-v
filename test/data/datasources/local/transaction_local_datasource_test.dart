@@ -1,7 +1,7 @@
-import 'package:flutter_pos/core/services/database/database_service.dart';
-import 'package:flutter_pos/data/datasources/local/transaction_local_datasource_impl.dart';
-import 'package:flutter_pos/data/models/ordered_product_model.dart';
-import 'package:flutter_pos/data/models/transaction_model.dart';
+import 'package:vecta_pos/core/services/database/database_service.dart';
+import 'package:vecta_pos/data/datasources/local/transaction_local_datasource_impl.dart';
+import 'package:vecta_pos/data/models/ordered_product_model.dart';
+import 'package:vecta_pos/data/models/transaction_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 

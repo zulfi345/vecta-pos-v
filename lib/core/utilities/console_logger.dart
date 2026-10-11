@@ -19,8 +19,8 @@ final _logPrinter = Logger(
     dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
     printEmojis: false,
     excludePaths: [
-      'package:flutter_pos/core/utilities/console_logger.dart',
-      'package:flutter_pos/core/common/result.dart',
+      'package:vecta_pos/core/utilities/console_logger.dart',
+      'package:vecta_pos/core/common/result.dart',
       '<asynchronous suspension>',
     ],
   ),
