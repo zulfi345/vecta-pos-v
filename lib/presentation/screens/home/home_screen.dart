@@ -65,7 +65,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Future<void> onRefresh() async {
     await ref.read(productsNotifierProvider.notifier).getAllProducts();
-    await ref.read(mainNotifierProvider.notifier).checkIsHasQueuedActions();
   }
 
   @override
@@ -125,10 +124,6 @@ class _Body extends ConsumerWidget {
         title: const _Title(),
         elevation: 0,
         shadowColor: Colors.transparent,
-        actions: const [
-          _SyncButton(),
-          _NetworkInfo(),
-        ],
       ),
       body: RefreshIndicator(
         onRefresh: onRefresh,
@@ -249,90 +244,6 @@ class _Title extends ConsumerWidget {
           ],
         ),
       ],
-    );
-  }
-}
-
-class _SyncButton extends ConsumerWidget {
-  const _SyncButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isHasQueuedActions = ref.watch(mainNotifierProvider.select((p) => p.isHasQueuedActions));
-    final isSyncronizing = ref.watch(mainNotifierProvider.select((p) => p.isSyncronizing));
-
-    return Padding(
-      padding: const EdgeInsets.only(right: AppSizes.padding / 4),
-      child: AppButton(
-        height: 26,
-        borderRadius: BorderRadius.circular(4),
-        padding: const EdgeInsets.symmetric(horizontal: AppSizes.padding / 2),
-        buttonColor: isHasQueuedActions && !isSyncronizing
-            ? Theme.of(context).colorScheme.surfaceContainer
-            : Theme.of(context).colorScheme.shadow.withValues(alpha: 0.06),
-        child: Row(
-          children: [
-            Icon(
-              isSyncronizing
-                  ? Icons.sync
-                  : isHasQueuedActions
-                  ? Icons.cloud_done_sharp
-                  : Icons.sync_problem_sharp,
-              size: 12,
-              color: isHasQueuedActions && !isSyncronizing
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.outline,
-            ),
-            const SizedBox(width: AppSizes.padding / 4),
-            Text(
-              isSyncronizing
-                  ? 'Syncronizing'
-                  : isHasQueuedActions
-                  ? 'Synced'
-                  : 'Pending',
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                color: isHasQueuedActions && !isSyncronizing
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.outline,
-              ),
-            ),
-          ],
-        ),
-        onTap: () {
-          ref.read(mainNotifierProvider.notifier).checkAndSyncAllData();
-        },
-      ),
-    );
-  }
-}
-
-class _NetworkInfo extends ConsumerWidget {
-  const _NetworkInfo();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isHasInternet = ref.watch(mainNotifierProvider.select((provider) => provider.isHasInternet));
-
-    return Padding(
-      padding: const EdgeInsets.only(right: AppSizes.padding),
-      child: AppButton(
-        height: 26,
-        borderRadius: BorderRadius.circular(4),
-        padding: const EdgeInsets.symmetric(horizontal: AppSizes.padding / 2),
-        buttonColor: isHasInternet
-            ? Theme.of(context).colorScheme.surfaceContainer
-            : Theme.of(context).colorScheme.shadow.withValues(alpha: 0.06),
-        child: Icon(
-          isHasInternet ? Icons.wifi_rounded : Icons.wifi_off_rounded,
-          size: 12,
-          color: isHasInternet ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.outline,
-        ),
-        onTap: () {
-          AppSnackBar.show(isHasInternet ? 'Online mode' : 'No internet connection, running in offline mode');
-        },
-      ),
     );
   }
 }

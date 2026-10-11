@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/di/app_providers.dart';
+import '../../../core/utilities/console_logger.dart';
 import '../../../domain/usecases/params/base_params.dart';
 import '../../../domain/usecases/product_usecases.dart';
 import '../auth/auth_notifier.dart';
@@ -54,7 +55,7 @@ class ProductsNotifier extends Notifier<ProductsState> {
       }
     } else {
       state = state.copyWith(isLoadingMore: false);
-      throw Exception(res.error?.toString() ?? 'Failed to load data');
+      ce(res.error ?? 'Failed to load data');
     }
   }
 }

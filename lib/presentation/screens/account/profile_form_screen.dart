@@ -84,7 +84,7 @@ class _ProfileFormScreenState extends ConsumerState<ProfileFormScreen> {
       AppSnackBar.show('Profile updated');
 
       // Refresh user data
-      ref.read(mainNotifierProvider.notifier).getAndSyncAllUserData();
+      ref.read(mainNotifierProvider.notifier).loadUserData();
     } else {
       AppDialog.showError(error: res.error.toString());
     }
