@@ -19,7 +19,7 @@ void main() async {
   // 3. Initialize Supabase untuk sistem lisensi
   await Supabase.initialize(
     url: 'https://zvpmcrpxydkdpmxttkcw.supabase.co',
-    anonKey: 'sb_publishable_jJfj6-zPDPP4bfMDR...',
+    anonKey: 'sb_publishable_jJfj6-zPDPp4bfMDRe9vbg_FQxuHBRt',
   );
 
   // Initialize Firebase (use `flutterfire configure` to generate the options)
