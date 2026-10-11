@@ -36,7 +36,7 @@ class HomeNotifier extends AutoDisposeNotifier<HomeState> {
         createdBy: user,
         receivedAmount: state.receivedAmount,
         returnAmount: state.receivedAmount - getTotalAmount(),
-        totalOrderedProduct: state.orderedProducts.length,
+        totalOrderedProduct: state.orderedProducts.fold<int>(0, (sum, e) => sum + e.quantity),
         totalAmount: getTotalAmount(),
       );
 

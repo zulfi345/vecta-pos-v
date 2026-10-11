@@ -120,7 +120,10 @@ if (at.isBefore(start) || !at.isBefore(end)) continue;
 inRange.add(t);
 d.revenue += t.totalAmount;
 d.count += 1;
-d.items += t.totalOrderedProduct;
+final lines = t.orderedProducts;
+d.items += (lines == null || lines.isEmpty)
+? t.totalOrderedProduct
+: lines.fold<int>(0, (sum, e) => sum + e.quantity);
 if (t.paymentMethod == 'cash') {
 d.cash += t.totalAmount;
 } else {

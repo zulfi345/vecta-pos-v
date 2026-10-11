@@ -10,35 +10,22 @@ class LicenseService {
       final deviceId = await _deviceInfoService.getDeviceId();
       final deviceName = await _deviceInfoService.getDeviceName();
 
-      final subResponse = await _supabase
-          .from('subscriptions')
-          .select()
-          .eq('owner_email', ownerEmail)
-          .maybeSingle();
+      final res = await _supabase.rpc('check_license', params: {
+        'p_email': ownerEmail,
+        'p_device_id': deviceId,
+        'p_device_name': deviceName,
+      });
 
-      if (subResponse == null) {
-        return {'status': 'not_registered', 'message': 'Email belum terdaftar.'};
+      final data = Map<String, dynamic>.from(res as Map);
+      if (data['status'] == 'active') {
+        return {
+          'status': 'active',
+          'expired_at': DateTime.parse(data['expired_at'] as String),
+          'is_trial': data['is_trial'] == true,
+          'device_id': deviceId,
+        };
       }
-
-      final expiredAt = DateTime.parse(subResponse['expired_at']);
-      final isExpired = DateTime.now().isAfter(expiredAt);
-
-      if (isExpired) {
-        return {'status': 'expired', 'message': 'Masa aktif langganan habis.'};
-      }
-
-      await _supabase.from('devices').upsert({
-        'owner_email': ownerEmail,
-        'device_id': deviceId,
-        'device_name': deviceName,
-        'last_checkin': DateTime.now().toIso8601String(),
-      }, onConflict: 'owner_email, device_id');
-
-      return {
-        'status': 'active',
-        'expired_at': expiredAt,
-        'device_id': deviceId,
-      };
+      return data;
     } catch (e) {
       return {'status': 'offline_error', 'error': e.toString()};
     }

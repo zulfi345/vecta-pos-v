@@ -31,6 +31,35 @@ class _LicenseGateState extends State<LicenseGate> {
     _checkLicenseFlow();
   }
 
+  static const _kExpiredAt = 'license_expired_at';
+  static const _kLastSeen = 'license_last_seen';
+
+  Future<void> _saveLicenseCache(DateTime expiredAt) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_kExpiredAt, expiredAt.toIso8601String());
+    await prefs.setInt(_kLastSeen, DateTime.now().millisecondsSinceEpoch);
+  }
+
+  Future<void> _clearLicenseCache() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_kExpiredAt);
+    await prefs.remove(_kLastSeen);
+  }
+
+  /// True jika masa aktif tersimpan masih berlaku dan jam HP tidak dimundurkan.
+  Future<bool> _isCachedLicenseValid() async {
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString(_kExpiredAt);
+    final lastSeen = prefs.getInt(_kLastSeen);
+    if (raw == null || lastSeen == null) return false;
+    final expiredAt = DateTime.tryParse(raw);
+    if (expiredAt == null) return false;
+    final nowMs = DateTime.now().millisecondsSinceEpoch;
+    if (nowMs < lastSeen - const Duration(minutes: 5).inMilliseconds) return false;
+    if (nowMs > lastSeen) await prefs.setInt(_kLastSeen, nowMs);
+    return DateTime.now().isBefore(expiredAt);
+  }
+
   Future<void> _checkLicenseFlow() async {
     _deviceId = await _deviceInfoService.getDeviceId();
     final prefs = await SharedPreferences.getInstance();
@@ -50,17 +79,30 @@ class _LicenseGateState extends State<LicenseGate> {
     if (!mounted) return;
 
     if (result['status'] == 'active') {
+      await _saveLicenseCache(result['expired_at'] as DateTime);
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
         _isAuthorized = true;
       });
     } else if (result['status'] == 'offline_error') {
+      if (await _isCachedLicenseValid()) {
+        if (!mounted) return;
+        setState(() {
+          _isLoading = false;
+          _isAuthorized = true;
+        });
+        return;
+      }
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
         _isLocked = true;
         _statusMessage = 'Tidak ada koneksi internet. Masukkan Kode Darurat jika diperlukan.';
       });
     } else {
+      await _clearLicenseCache();
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
         _isLocked = true;
@@ -84,6 +126,7 @@ class _LicenseGateState extends State<LicenseGate> {
     if (result['status'] == 'active') {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('owner_email', email.trim());
+      await _saveLicenseCache(result['expired_at'] as DateTime);
 
       setState(() {
         _isLoading = false;
