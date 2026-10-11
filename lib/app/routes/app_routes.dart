@@ -10,7 +10,13 @@ import '../../presentation/screens/account/profile_form_screen.dart';
 import '../../presentation/screens/auth/sign_in/sign_in_screen.dart';
 import '../../presentation/screens/error/error_screen.dart';
 import '../../presentation/screens/home/home_screen.dart';
+import '../../presentation/screens/features/attendance_screen.dart';
+import '../../presentation/screens/features/cashier_screen.dart';
+import '../../presentation/screens/features/hpp_screen.dart';
+import '../../presentation/screens/features/insights_screens.dart';
+import '../../presentation/screens/features/records_screen.dart';
 import '../../presentation/screens/main/main_screen.dart';
+import '../../presentation/screens/reports/reports_screen.dart';
 import '../../presentation/screens/products/product_detail_screen.dart';
 import '../../presentation/screens/products/product_form_screen.dart';
 import '../../presentation/screens/products/products_screen.dart';
@@ -119,6 +125,7 @@ class AppRoutes {
       routes: [
         _home(),
         _products(),
+        _reports(),
         _transactions(),
         _account(),
       ],
@@ -178,7 +185,32 @@ class AppRoutes {
         _profileEdit(),
         _about(),
         _printerSettings(),
+        _simple('employees', const EmployeesScreen()),
+        _simple('attendance', const AttendanceScreen()),
+        _simple('cashier', const CashierScreen()),
+        _simple('hpp', const HppScreen()),
+        _simple('expenses', const ExpensesScreen()),
+        _simple('low-stock', const LowStockScreen()),
+        _simple('best-sellers', const BestSellersScreen()),
       ],
+    );
+  }
+
+  GoRoute _reports() {
+    return GoRoute(
+      path: '/reports',
+      pageBuilder: (context, state) {
+        return const NoTransitionPage<void>(
+          child: ReportsScreen(),
+        );
+      },
+    );
+  }
+
+  GoRoute _simple(String path, Widget screen) {
+    return GoRoute(
+      path: path,
+      builder: (context, state) => screen,
     );
   }
 

@@ -78,8 +78,8 @@ class AppTheme {
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.surfaceContainerLowest,
         shadowColor: colorScheme.surfaceContainerHighest,
-        elevation: 0.5,
-        scrolledUnderElevation: 0.5,
+        elevation: 0,
+        scrolledUnderElevation: 0,
         titleSpacing: AppSizes.padding,
         titleTextStyle: textTheme.titleLarge?.copyWith(
           fontWeight: FontWeight.bold,
@@ -131,7 +131,31 @@ class AppTheme {
         showCloseIcon: true,
         elevation: 1,
       ),
-      dialogTheme: DialogThemeData(backgroundColor: colorScheme.surfaceContainerLowest),
+      dialogTheme: DialogThemeData(
+        backgroundColor: colorScheme.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      ),
+      cardTheme: CardThemeData(
+        elevation: 0,
+        color: colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: colorScheme.outlineVariant.withValues(alpha: 0.5)),
+        ),
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: colorScheme.surface,
+        indicatorColor: colorScheme.primaryContainer,
+        elevation: 0,
+        labelTextStyle: WidgetStatePropertyAll(
+          textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700, fontSize: 10.5),
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        ),
+      ),
     );
   }
 }

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "278717955661",
+    "project_id": "vecta-pos",
+    "storage_bucket": "vecta-pos.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278717955661:android:98eebc382580800416e604",
+        "android_client_info": {
+          "package_name": "com.elriztechnology.flutter_pos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "278717955661-f9aeec4jdbuapv8rd1mogkklu5gpfrqg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.elriztechnology.flutter_pos",
+            "certificate_hash": "5e8f16062acde06b0d53293964b35820a6336401"
+          }
+        },
+        {
+          "client_id": "278717955661-qiq7girq7a81cptk2gol79sligim1nm7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBcF3tLcNiQX9rpFMqw7lBKEQ6UAgWLVQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "278717955661-qiq7girq7a81cptk2gol79sligim1nm7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

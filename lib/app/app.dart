@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/i18n/app_lang.dart';
 import '../core/locale/app_locale.dart';
 import '../presentation/providers/theme/theme_notifier.dart';
 import 'di/app_providers.dart';
@@ -14,6 +15,7 @@ class App extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeNotifierProvider.select((s) => s.themeData));
     final router = ref.watch(appRoutesProvider).router;
+    ref.watch(languageProvider);
 
     return MaterialApp.router(
       title: 'Vecta POS',

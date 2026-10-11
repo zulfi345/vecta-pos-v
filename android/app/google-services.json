@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "278717955661",
+    "project_id": "vecta-pos",
+    "storage_bucket": "vecta-pos.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278717955661:android:98eebc382580800416e604",
+        "android_client_info": {
+          "package_name": "com.elriztechnology.flutter_pos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBcF3tLcNiQX9rpFMqw7lBKEQ6UAgWLVQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

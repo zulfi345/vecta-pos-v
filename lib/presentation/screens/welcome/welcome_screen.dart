@@ -1,5 +1,6 @@
 import 'package:app_image/app_image.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
+import 'package:flutter_pos/core/i18n/tr_text.dart';
 
 import '../../../core/assets/assets.dart';
 import '../../../core/themes/app_sizes.dart';

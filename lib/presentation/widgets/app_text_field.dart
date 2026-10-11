@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
+import 'package:flutter_pos/core/i18n/tr_text.dart';
 import 'package:flutter/services.dart';
 
+import '../../core/i18n/app_lang.dart';
 import '../../core/locale/app_locale.dart';
 import '../../core/themes/app_sizes.dart';
 import 'app_icon_button.dart';
@@ -164,7 +166,7 @@ class _AppTextFieldState extends State<AppTextField> {
               fillColor: Theme.of(context).colorScheme.surface,
               prefixIcon: prefix(context),
               suffixIcon: suffix(context),
-              hintText: widget.hintText,
+              hintText: widget.hintText == null ? null : tr(widget.hintText!),
               hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontSize: widget.fontSize,
                 color: Theme.of(context).colorScheme.outlineVariant,
