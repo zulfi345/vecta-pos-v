@@ -55,6 +55,10 @@ class DatabaseService {
     if (oldVersion < 2) {
       await db.execute(DatabaseConfig.dropQueuedActionTable);
     }
+
+    if (oldVersion < 3) {
+      await db.execute(DatabaseConfig.createRecordTable);
+    }
   }
 
   Future<void> dropDatabase(String path) async {

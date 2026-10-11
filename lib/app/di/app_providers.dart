@@ -10,6 +10,7 @@ import '../../core/services/info/device_info_service.dart';
 import '../../core/services/logger/error_logger_service.dart';
 import '../../core/services/printer/printer_service.dart';
 import '../../data/datasources/local/product_local_datasource_impl.dart';
+import '../../data/datasources/local/record_local_datasource_impl.dart';
 import '../../data/datasources/local/transaction_local_datasource_impl.dart';
 import '../../data/datasources/local/user_local_datasource_impl.dart';
 import '../../data/datasources/remote/auth_remote_datasource_impl.dart';
@@ -61,6 +62,9 @@ final transactionLocalDatasourceProvider = Provider<TransactionLocalDatasourceIm
 );
 final userLocalDatasourceProvider = Provider<UserLocalDatasourceImpl>(
   (ref) => UserLocalDatasourceImpl(ref.watch(databaseServiceProvider)),
+);
+final recordLocalDatasourceProvider = Provider<RecordLocalDatasourceImpl>(
+  (ref) => RecordLocalDatasourceImpl(ref.watch(databaseServiceProvider)),
 );
 
 // Remote Datasources

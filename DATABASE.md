@@ -1,6 +1,6 @@
 # DATABASE.md - Database Schema Reference
 
-Database: SQLite (`app_database.db`), version: 2
+Database: SQLite (`app_database.db`), version: 3
 
 ## Tables
 
@@ -65,8 +65,23 @@ Database: SQLite (`app_database.db`), version: 2
 | createdAt     | DATETIME | DEFAULT CURRENT_TIMESTAMP |
 | updatedAt     | DATETIME | DEFAULT CURRENT_TIMESTAMP |
 
+### Record
+
+Menyimpan data fitur: karyawan, absensi, shift kasir, HPP, dan pengeluaran. Kolom `store` berisi `employees`,
+`attendance`, `shifts`, `hpp`, atau `expenses`; kolom `data` berisi JSON.
+
+| Column    | Type     | Constraints                           |
+| --------- | -------- | ------------------------------------- |
+| userId    | TEXT     | NOT NULL, bagian dari PRIMARY KEY     |
+| store     | TEXT     | NOT NULL, bagian dari PRIMARY KEY     |
+| id        | TEXT     | NOT NULL, bagian dari PRIMARY KEY     |
+| data      | TEXT     | NOT NULL                              |
+| createdAt | DATETIME | DEFAULT CURRENT_TIMESTAMP             |
+| updatedAt | DATETIME | DEFAULT CURRENT_TIMESTAMP             |
+
 ## Migrations
 
 | Version | Changes                  |
 | ------- | ------------------------ |
 | 2       | Drop `QueuedAction` table |
+| 3       | Add `Record` table        |
