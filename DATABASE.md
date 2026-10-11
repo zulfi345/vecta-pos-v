@@ -1,6 +1,6 @@
 # DATABASE.md - Database Schema Reference
 
-Database: SQLite (`app_database.db`), version: 1
+Database: SQLite (`app_database.db`), version: 2
 
 ## Tables
 
@@ -65,13 +65,8 @@ Database: SQLite (`app_database.db`), version: 1
 | createdAt     | DATETIME | DEFAULT CURRENT_TIMESTAMP |
 | updatedAt     | DATETIME | DEFAULT CURRENT_TIMESTAMP |
 
-### QueuedAction
+## Migrations
 
-| Column     | Type     | Constraints               |
-| ---------- | -------- | ------------------------- |
-| id         | INTEGER  | NOT NULL                  |
-| repository | TEXT     |                           |
-| method     | TEXT     |                           |
-| param      | TEXT     |                           |
-| isCritical | INTEGER  | (0 = false, 1 = true)     |
-| createdAt  | DATETIME | DEFAULT CURRENT_TIMESTAMP |
+| Version | Changes                  |
+| ------- | ------------------------ |
+| 2       | Drop `QueuedAction` table |

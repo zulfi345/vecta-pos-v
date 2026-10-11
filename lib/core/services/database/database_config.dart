@@ -3,13 +3,12 @@ class DatabaseConfig {
   DatabaseConfig._();
 
   static const String dbPath = 'app_database.db';
-  static const int version = 1;
+  static const int version = 2;
 
   static const String userTableName = 'User';
   static const String productTableName = 'Product';
   static const String transactionTableName = 'Transaction';
   static const String orderedProductTableName = 'OrderedProduct';
-  static const String queuedActionTableName = 'QueuedAction';
 
   static const String createUserTable =
       '''
@@ -84,15 +83,12 @@ CREATE TABLE IF NOT EXISTS '$orderedProductTableName' (
 );
 ''';
 
-  static const String createQueuedActionTable =
-      '''
-CREATE TABLE IF NOT EXISTS '$queuedActionTableName' (
-    'id' INTEGER NOT NULL,
-    'repository' TEXT,
-    'method' TEXT,
-    'param' TEXT,
-    'isCritical' INTEGER,
-    'createdAt' DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-''';
+  static const List<String> createStatements = [
+    createUserTable,
+    createProductTable,
+    createTransactionTable,
+    createOrderedProductTable,
+  ];
+
+  static const String dropQueuedActionTable = 'DROP TABLE IF EXISTS QueuedAction';
 }

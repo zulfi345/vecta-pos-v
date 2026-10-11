@@ -19,56 +19,48 @@ class DatabaseService {
 
   Future<void> init() async {
     if (Platform.isWindows || Platform.isLinux) {
-      // Initialize FFI
       sqfliteFfiInit();
     }
 
-    // Get the path to the database
     String path = join(await getDatabasesPath(), DatabaseConfig.dbPath);
 
-    if (kDebugMode) {
-      // Only for development purpose
-      // await dropDatabase(path);
-    }
-
-    // Create database if not exists
     File databaseFile = File(path);
 
     if (!await databaseFile.exists()) await databaseFile.create();
 
-    // Open database
-    database = await openDatabase(path);
-
-    // Create tables
-    await Future.wait([
-      database.execute(DatabaseConfig.createUserTable),
-      database.execute(DatabaseConfig.createProductTable),
-      database.execute(DatabaseConfig.createTransactionTable),
-      database.execute(DatabaseConfig.createOrderedProductTable),
-      database.execute(DatabaseConfig.createQueuedActionTable),
-    ]);
+    database = await openDatabase(
+      path,
+      version: DatabaseConfig.version,
+      onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
+    );
   }
 
   @visibleForTesting
   Future<void> initTestDatabase({required Database testDatabase}) async {
     database = testDatabase;
 
-    // Create tables
-    await Future.wait([
-      database.execute(DatabaseConfig.createUserTable),
-      database.execute(DatabaseConfig.createProductTable),
-      database.execute(DatabaseConfig.createTransactionTable),
-      database.execute(DatabaseConfig.createOrderedProductTable),
-      database.execute(DatabaseConfig.createQueuedActionTable),
-    ]);
+    await _onCreate(database, DatabaseConfig.version);
+  }
+
+  Future<void> _onCreate(Database db, int version) async {
+    for (final statement in DatabaseConfig.createStatements) {
+      await db.execute(statement);
+    }
+
+    await db.execute(DatabaseConfig.dropQueuedActionTable);
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute(DatabaseConfig.dropQueuedActionTable);
+    }
   }
 
   Future<void> dropDatabase(String path) async {
-    // Check if the database file exists
     File databaseFile = File(path);
 
     if (await databaseFile.exists()) {
-      // Delete the database file
       await databaseFile.delete();
 
       cw('Database deleted successfully!');
