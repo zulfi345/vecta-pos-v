@@ -12,13 +12,13 @@ import 'device_info_service.dart';
 class _Rpc {
   /// Cek / daftarkan HP owner. Param: p_device_id, p_device_name, p_register.
   /// Memakai auth.jwt(), jadi owner harus sudah login Supabase Auth.
-  static const ownerSession = 'owner_session';
+  static const ownerSession = 'owner_check_license';
 
   /// Login karyawan. Param: p_email, p_pin, p_device_id, p_device_name.
   static const staffLogin = 'staff_login';
 
   /// Cek / logout sesi karyawan. Param: p_email, p_employee_id, p_device_id, p_logout.
-  static const staffSession = 'staff_session';
+  static const staffSession = 'staff_check';
 }
 
 /// Sesi masuk yang disimpan di HP.
