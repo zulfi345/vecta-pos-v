@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'core/widgets/license_gate.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'; // <-- 1. Tambah import Supabase
 
 import 'app/app.dart';
@@ -49,7 +50,7 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [sharedPreferencesProvider.overrideWithValue(sharedPreferences)],
-      child: const App(),
+      child: const LicenseGate(child: App()),
     ),
   );
 }

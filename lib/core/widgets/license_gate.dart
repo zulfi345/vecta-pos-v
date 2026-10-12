@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/device_info_service.dart';
 import '../services/license_service.dart';
-import '../services/emergency_unlock_service.dart';
 
 class LicenseGate extends StatefulWidget {
   final Widget child;
@@ -23,7 +22,6 @@ class _LicenseGateState extends State<LicenseGate> {
   String _deviceId = '';
 
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _unlockController = TextEditingController();
 
   @override
   void initState() {
@@ -57,7 +55,7 @@ class _LicenseGateState extends State<LicenseGate> {
     final nowMs = DateTime.now().millisecondsSinceEpoch;
     if (nowMs < lastSeen - const Duration(minutes: 5).inMilliseconds) return false;
     if (nowMs > lastSeen) await prefs.setInt(_kLastSeen, nowMs);
-    return DateTime.now().isBefore(expiredAt);
+    return DateTime.now().isBefore(expiredAt.add(const Duration(days: 3)));
   }
 
   Future<void> _checkLicenseFlow() async {
@@ -98,7 +96,7 @@ class _LicenseGateState extends State<LicenseGate> {
       setState(() {
         _isLoading = false;
         _isLocked = true;
-        _statusMessage = 'Tidak ada koneksi internet. Masukkan Kode Darurat jika diperlukan.';
+        _statusMessage = 'Tidak ada koneksi internet dan masa aktif tersimpan sudah habis.';
       });
     } else {
       await _clearLicenseCache();
@@ -137,28 +135,6 @@ class _LicenseGateState extends State<LicenseGate> {
         _isLoading = false;
         _statusMessage = result['message'] ?? 'Gagal memverifikasi email.';
       });
-    }
-  }
-
-  void _handleEmergencyUnlock() {
-    final inputCode = _unlockController.text;
-    final isValid = EmergencyUnlockService.validateUnlockCode(
-      inputCode: inputCode,
-      currentDeviceId: _deviceId,
-    );
-
-    if (isValid) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Kode Darurat Valid! Membuka aplikasi...')),
-      );
-      setState(() {
-        _isAuthorized = true;
-        _isLocked = false;
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Kode Darurat Salah untuk perangkat ini!')),
-      );
     }
   }
 
@@ -217,25 +193,11 @@ class _LicenseGateState extends State<LicenseGate> {
                   padding: const EdgeInsets.all(12),
                   color: Colors.orange.shade50,
                   child: const Text(
-                    'Aplikasi memerlukan koneksi internet untuk memperbarui lisensi, atau masukkan Kode Darurat dari developer untuk akses offline.',
+                    'Aplikasi perlu terhubung ke internet untuk memperbarui lisensi. Sambungkan internet atau perpanjang langganan Anda.',
                     style: TextStyle(color: Colors.orange),
                   ),
                 ),
                 const SizedBox(height: 20),
-                TextField(
-                  controller: _unlockController,
-                  decoration: const InputDecoration(
-                    labelText: 'Masukkan Kode Darurat (Cth: VECTA-XXXX)',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
-                  onPressed: _handleEmergencyUnlock,
-                  child: const Text('Buka dengan Kode Darurat'),
-                ),
-                const SizedBox(height: 12),
                 OutlinedButton(
                   onPressed: () {
                     setState(() {

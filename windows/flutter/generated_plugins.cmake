@@ -3,12 +3,10 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  cloud_firestore
-  connectivity_plus
+  app_links
   file_selector_windows
   firebase_auth
   firebase_core
-  firebase_storage
   flutter_libserialport
   permission_handler_windows
   unified_esc_pos_printer
