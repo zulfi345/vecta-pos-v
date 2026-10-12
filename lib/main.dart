@@ -9,7 +9,6 @@ import 'package:supabase_flutter/supabase_flutter.dart'; // <-- 1. Tambah import
 import 'app/app.dart';
 import 'app/di/app_providers.dart';
 import 'core/services/database/database_service.dart';
-import 'core/widgets/license_gate.dart'; // <-- 2. Tambah import LicenseGate
 import 'firebase_options.dart';
 
 void main() async {
@@ -50,9 +49,7 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [sharedPreferencesProvider.overrideWithValue(sharedPreferences)],
-      child: const LicenseGate(
-        child: App(), // <-- 4. Dibungkus LicenseGate agar sistem lisensi aktif
-      ),
+      child: const App(),
     ),
   );
 }

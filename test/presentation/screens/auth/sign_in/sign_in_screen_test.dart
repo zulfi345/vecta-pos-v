@@ -55,7 +55,7 @@ void main() {
       // assert
       expect(find.text('Welcome!'), findsOneWidget);
       expect(find.text('Welcome to Vecta POS'), findsOneWidget);
-      expect(find.text('Sign In With Google'), findsOneWidget);
+      expect(find.text('Masuk'), findsOneWidget);
     });
 
     testWidgets('should display sign in button', (tester) async {
@@ -64,7 +64,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // assert
-      final button = find.text('Sign In With Google');
+      final button = find.text('Masuk');
       expect(button, findsOneWidget);
     });
   });

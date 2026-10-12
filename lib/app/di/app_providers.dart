@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/services/account_service.dart';
 import '../../core/services/database/database_service.dart';
 import '../../core/services/info/device_info_service.dart';
 import '../../core/services/logger/error_logger_service.dart';
@@ -44,6 +45,9 @@ final deviceInfoServiceProvider = Provider<DeviceInfoService>(
   (ref) => DeviceInfoService(ref.watch(deviceInfoPluginProvider)),
 );
 final errorLoggerServiceProvider = Provider<ErrorLoggerService>((ref) => ErrorLoggerService());
+final accountServiceProvider = Provider<AccountService>(
+  (ref) => AccountService(ref.watch(sharedPreferencesProvider)),
+);
 final printerServiceProvider = Provider<PrinterService>(
   (ref) => PrinterService(ref.watch(sharedPreferencesProvider)),
 );
