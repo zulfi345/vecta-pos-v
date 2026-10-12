@@ -44,6 +44,14 @@ subtitle: tr('Add and manage your staff'),
 color: Colors.indigo,
 onTap: () => context.go('/account/employees'),
 ),
+if (ref.watch(authNotifierProvider.select((s) => s.isOwner)))
+MenuTile(
+icon: Icons.pin_rounded,
+title: 'Akses Karyawan (PIN)',
+subtitle: 'Buat PIN login karyawan, lepas HP',
+color: Colors.deepPurple,
+onTap: () => context.go('/account/staff-access'),
+),
 const SizedBox(height: 8),
 const SectionTitle('Finance'),
 MenuTile(

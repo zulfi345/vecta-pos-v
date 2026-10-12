@@ -19,6 +19,9 @@ class _Rpc {
 
   /// Cek / logout sesi karyawan. Param: p_email, p_employee_id, p_device_id, p_logout.
   static const staffSession = 'staff_check';
+
+  /// Kelola karyawan & HP (khusus HP owner). Param: p_action, p_data.
+  static const ownerManage = 'owner_manage';
 }
 
 /// Sesi masuk yang disimpan di HP.
@@ -235,6 +238,23 @@ class AccountService {
       // Tetap keluar secara lokal walau server tidak terjangkau.
     }
     await clearSession();
+  }
+
+  // ───────────────────────── Kelola karyawan (owner) ─────────────────────────
+
+  /// Memanggil `owner_manage`. [action]: list_employees, add_employee,
+  /// release_employee, set_employee_active, list_devices, remove_device.
+  /// `device_id` HP ini ditambahkan otomatis ke [data].
+  Future<Map<String, dynamic>> manage(String action, [Map<String, dynamic> data = const {}]) async {
+    try {
+      final raw = await _db.rpc(_Rpc.ownerManage, params: {
+        'p_action': action,
+        'p_data': {...data, 'device_id': await _device.getDeviceId()},
+      });
+      return _asMap(raw);
+    } catch (e) {
+      return _offline(e);
+    }
   }
 
   // ───────────────────────────── Internal ─────────────────────────────
