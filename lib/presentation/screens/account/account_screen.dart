@@ -16,6 +16,7 @@ const AccountScreen({super.key});
 @override
 Widget build(BuildContext context, WidgetRef ref) {
 ref.watch(languageProvider);
+final isOwner = ref.watch(authNotifierProvider.select((s) => s.isOwner));
 return Scaffold(
 appBar: AppBar(title: const Text('Account')),
 body: ListView(
@@ -37,6 +38,7 @@ subtitle: tr('Employee check in / check out'),
 color: Colors.blue,
 onTap: () => context.go('/account/attendance'),
 ),
+if (isOwner)
 MenuTile(
 icon: Icons.badge_rounded,
 title: tr('Employee Management'),
@@ -44,7 +46,7 @@ subtitle: tr('Add and manage your staff'),
 color: Colors.indigo,
 onTap: () => context.go('/account/employees'),
 ),
-if (ref.watch(authNotifierProvider.select((s) => s.isOwner)))
+if (isOwner)
 MenuTile(
 icon: Icons.pin_rounded,
 title: 'Akses Karyawan (PIN)',
@@ -70,6 +72,7 @@ onTap: () => context.go('/account/expenses'),
 ),
 const SizedBox(height: 8),
 const SectionTitle('Inventory & Insights'),
+if (isOwner)
 MenuTile(
 icon: Icons.warning_amber_rounded,
 title: tr('Low Stock'),
@@ -97,6 +100,7 @@ leftButtonText: 'Close',
 child: const _LanguageDialogBody(),
 ),
 ),
+if (isOwner)
 MenuTile(
 icon: Icons.person_rounded,
 title: tr('Profile'),
@@ -119,6 +123,7 @@ title: tr('Printer Settings'),
 color: Colors.cyan,
 onTap: () => context.go('/account/printer-settings'),
 ),
+if (isOwner)
 MenuTile(
 icon: Icons.info_outline_rounded,
 title: tr('About'),

@@ -30,6 +30,15 @@ import 'params/error_screen_param.dart';
 class AppRoutes {
   final Ref _ref;
 
+  /// Halaman yang hanya boleh dibuka owner (karyawan dialihkan ke /account).
+  static const _ownerOnlyPaths = {
+    '/account/employees',
+    '/account/staff-access',
+    '/account/low-stock',
+    '/account/profile',
+    '/account/about',
+  };
+
   AppRoutes(this._ref) {
     _initialize();
   }
@@ -71,6 +80,10 @@ class AppRoutes {
 
         if (!isAuthenticated && !isAuthRoute) {
           return '/sign-in';
+        }
+
+        if (isAuthenticated && !authState.isOwner && _ownerOnlyPaths.contains(state.fullPath)) {
+          return '/account';
         }
 
         if (isAuthenticated && isAuthRoute) {
