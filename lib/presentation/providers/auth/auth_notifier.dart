@@ -21,6 +21,8 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 
   Future<void> _initialize() async {
+    // Tunda sampai build() selesai agar state tidak tertimpa isChecking: true.
+    await Future<void>.microtask(() {});
     try {
       final saved = _account.savedSession;
       if (saved == null) {
