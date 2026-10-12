@@ -11,3 +11,5 @@ config.json
 *.keystore
 *.jks
 android/app/key.properties
+build/
+*.apk
