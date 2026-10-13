@@ -54,6 +54,14 @@ subtitle: 'Buat PIN login karyawan, lepas HP',
 color: Colors.deepPurple,
 onTap: () => context.go('/account/staff-access'),
 ),
+if (isOwner)
+MenuTile(
+icon: Icons.phone_android_rounded,
+title: 'HP Terdaftar',
+subtitle: 'Lihat dan hapus HP yang terhubung',
+color: Colors.teal,
+onTap: () => context.go('/account/devices'),
+),
 const SizedBox(height: 8),
 const SectionTitle('Finance'),
 MenuTile(

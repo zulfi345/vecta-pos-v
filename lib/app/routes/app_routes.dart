@@ -15,6 +15,7 @@ import '../../presentation/screens/features/cashier_screen.dart';
 import '../../presentation/screens/features/hpp_screen.dart';
 import '../../presentation/screens/features/insights_screens.dart';
 import '../../presentation/screens/features/records_screen.dart';
+import '../../presentation/screens/features/devices_screen.dart';
 import '../../presentation/screens/features/staff_access_screen.dart';
 import '../../presentation/screens/main/main_screen.dart';
 import '../../presentation/screens/reports/reports_screen.dart';
@@ -201,6 +202,7 @@ class AppRoutes {
         _printerSettings(),
         _simple('employees', const EmployeesScreen()),
         _simple('staff-access', const StaffAccessScreen()),
+        _simple('devices', const DevicesScreen()),
         _simple('attendance', const AttendanceScreen()),
         _simple('cashier', const CashierScreen()),
         _simple('hpp', const HppScreen()),
