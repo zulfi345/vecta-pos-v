@@ -16,6 +16,7 @@ import '../../presentation/screens/features/hpp_screen.dart';
 import '../../presentation/screens/features/insights_screens.dart';
 import '../../presentation/screens/features/records_screen.dart';
 import '../../presentation/screens/features/devices_screen.dart';
+import '../../presentation/screens/features/subscription_screen.dart';
 import '../../presentation/screens/features/staff_access_screen.dart';
 import '../../presentation/screens/main/main_screen.dart';
 import '../../presentation/screens/reports/reports_screen.dart';
@@ -35,6 +36,7 @@ class AppRoutes {
   static const _ownerOnlyPaths = {
     '/account/employees',
     '/account/staff-access',
+    '/account/subscription',
     '/account/low-stock',
     '/account/profile',
     '/account/about',
@@ -128,6 +130,12 @@ class AppRoutes {
       builder: (context, state) {
         return const SignInScreen();
       },
+      routes: [
+        GoRoute(
+          path: 'renew',
+          builder: (context, state) => const SubscriptionScreen(standalone: true),
+        ),
+      ],
     );
   }
 
@@ -203,6 +211,7 @@ class AppRoutes {
         _simple('employees', const EmployeesScreen()),
         _simple('staff-access', const StaffAccessScreen()),
         _simple('devices', const DevicesScreen()),
+        _simple('subscription', const SubscriptionScreen()),
         _simple('attendance', const AttendanceScreen()),
         _simple('cashier', const CashierScreen()),
         _simple('hpp', const HppScreen()),

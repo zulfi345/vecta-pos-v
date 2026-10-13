@@ -62,6 +62,14 @@ subtitle: 'Lihat dan hapus HP yang terhubung',
 color: Colors.teal,
 onTap: () => context.go('/account/devices'),
 ),
+if (isOwner)
+MenuTile(
+icon: Icons.workspace_premium_rounded,
+title: 'Langganan',
+subtitle: 'Masa aktif dan perpanjang lewat QR DANA',
+color: Colors.amber,
+onTap: () => context.go('/account/subscription'),
+),
 const SizedBox(height: 8),
 const SectionTitle('Finance'),
 MenuTile(

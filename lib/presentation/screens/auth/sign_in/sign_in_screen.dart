@@ -1,6 +1,8 @@
 import 'package:app_image/app_image.dart';
 import 'package:flutter/material.dart' hide Text;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:vecta_pos/core/i18n/tr_text.dart';
 
 import '../../../../app/di/app_providers.dart';
@@ -24,6 +26,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   final _secret = TextEditingController();
   _Mode _mode = _Mode.owner;
   bool _hide = true;
+  bool _expired = false;
 
   @override
   void dispose() {
@@ -66,6 +69,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     if (res.isSuccess) {
       ref.read(appRoutesProvider).router.refresh();
     } else {
+      if (res.error?.toString().contains('Masa aktif') ?? false) {
+        setState(() => _expired = true);
+      }
       AppDialog.showError(error: res.error?.toString());
     }
   }
@@ -96,6 +102,16 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               const SizedBox(height: AppSizes.padding),
               if (notice != null && notice.isNotEmpty) ...[
                 Text(notice, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                const SizedBox(height: 12),
+              ],
+              if (!isStaff &&
+                  (_expired || (notice?.toLowerCase().contains('langganan') ?? false)) &&
+                  Supabase.instance.client.auth.currentSession != null) ...[
+                OutlinedButton.icon(
+                  onPressed: () => context.go('/sign-in/renew'),
+                  icon: const Icon(Icons.workspace_premium_rounded),
+                  label: const Text('Perpanjang langganan'),
+                ),
                 const SizedBox(height: 12),
               ],
               TextField(
