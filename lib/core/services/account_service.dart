@@ -86,6 +86,10 @@ class AccountService {
   static const _kSession = 'account_session';
   static const _kExpiredAt = 'account_expired_at';
   static const _kLastSeen = 'account_last_seen';
+  static const _kVerifiedAt = 'account_verified_at';
+
+  /// Batas HP boleh dipakai offline sejak terakhir dicek ke server.
+  static const maxOfflineDays = 7;
 
   // ───────────────────────── Sesi tersimpan ─────────────────────────
 
@@ -105,6 +109,7 @@ class AccountService {
     await _prefs.remove(_kSession);
     await _prefs.remove(_kExpiredAt);
     await _prefs.remove(_kLastSeen);
+    await _prefs.remove(_kVerifiedAt);
   }
 
   // ───────────────────── Cache masa aktif (offline) ─────────────────────
@@ -112,6 +117,7 @@ class AccountService {
   Future<void> saveExpiry(DateTime expiredAt) async {
     await _prefs.setString(_kExpiredAt, expiredAt.toIso8601String());
     await _prefs.setInt(_kLastSeen, DateTime.now().millisecondsSinceEpoch);
+    await _prefs.setInt(_kVerifiedAt, DateTime.now().millisecondsSinceEpoch);
   }
 
   /// True jika masa aktif tersimpan masih berlaku dan jam HP tidak dimundurkan.
@@ -123,6 +129,10 @@ class AccountService {
     if (expiredAt == null) return false;
     final nowMs = DateTime.now().millisecondsSinceEpoch;
     if (nowMs < lastSeen - const Duration(minutes: 5).inMilliseconds) return false;
+    final verifiedAt = _prefs.getInt(_kVerifiedAt);
+    if (verifiedAt != null && nowMs - verifiedAt > const Duration(days: maxOfflineDays).inMilliseconds) {
+      return false;
+    }
     if (nowMs > lastSeen) unawaited(_prefs.setInt(_kLastSeen, nowMs));
     return DateTime.now().isBefore(expiredAt);
   }
