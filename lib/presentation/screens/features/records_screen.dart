@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart' hide Text;
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/i18n/app_lang.dart';
 import '../../../core/i18n/tr_text.dart';
 import '../../../core/store/record_store.dart';
 import '../../widgets/ui_kit.dart';
 class FieldSpec {
-const FieldSpec(this.key, this.label, {this.number = false, this.required = false});
+const FieldSpec(this.key, this.label, {this.number = false, this.required = false, this.pin = false});
 final String key;
 final String label;
 final bool number;
 final bool required;
+
+/// Input PIN angka (4-6 digit), disembunyikan, disimpan sebagai teks.
+final bool pin;
 }
 /// Layar CRUD generik (tambah / ubah / hapus) yang dipakai Karyawan & Pengeluaran.
 class RecordsScreen extends ConsumerWidget {
@@ -180,6 +184,10 @@ if (f.required && text.isEmpty) {
 setState(() => _err = '${tr(f.label)}: ${tr('is required')}');
 return;
 }
+if (f.pin && text.isNotEmpty && (text.length < 4 || text.length > 6)) {
+setState(() => _err = '${tr(f.label)}: 4-6 digit');
+return;
+}
 rec[f.key] = f.number ? parseInt(text) : text;
 }
 widget.onSave(rec);
@@ -200,7 +208,10 @@ Padding(
 padding: const EdgeInsets.only(bottom: 12),
 child: TextField(
 controller: _c[f.key],
-keyboardType: f.number ? TextInputType.number : TextInputType.text,
+keyboardType: (f.number || f.pin) ? TextInputType.number : TextInputType.text,
+obscureText: f.pin,
+maxLength: f.pin ? 6 : null,
+inputFormatters: f.pin ? [FilteringTextInputFormatter.digitsOnly] : null,
 decoration: fieldDeco(context, tr(f.label), prefix: f.number ? 'Rp ' : null),
 ),
 ),
@@ -230,6 +241,7 @@ FieldSpec('name', 'Full Name', required: true),
 FieldSpec('role', 'Role / Position'),
 FieldSpec('phone', 'Phone Number'),
 FieldSpec('wage', 'Daily Wage', number: true),
+FieldSpec('pin', 'Attendance PIN (4-6 digits)', pin: true),
 ],
 titleOf: (r) => '${r['name'] ?? ''}',
 subtitleOf: (r) => [

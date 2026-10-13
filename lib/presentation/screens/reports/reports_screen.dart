@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/i18n/app_lang.dart';
 import '../../../core/i18n/tr_text.dart';
 import '../../../core/store/record_store.dart';
+import '../../../core/services/report/report_pdf_service.dart';
 import '../../../features/reports/report_calc.dart';
 import '../../widgets/bar_chart.dart';
 import '../../widgets/ui_kit.dart';
@@ -75,6 +76,26 @@ ScaffoldMessenger.of(context).showSnackBar(
 SnackBar(content: Text('Summary copied')),
 );
 }
+Future<void> _sharePdf(ReportData d, int expenses) async {
+final title = _period == ReportPeriod.day
+? 'Laporan Harian'
+: _period == ReportPeriod.week
+? 'Laporan Mingguan'
+: 'Laporan Bulanan';
+try {
+final file = await ReportPdfService.salesReport(
+data: d,
+title: title,
+rangeLabel: _rangeLabel(d),
+expenses: expenses,
+);
+await ReportPdfService.share(file, text: '$title - ${_rangeLabel(d)}');
+} catch (e) {
+if (!mounted) return;
+ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Gagal membuat PDF: $e')));
+}
+}
+
 @override
 Widget build(BuildContext context) {
 final cs = Theme.of(context).colorScheme;
@@ -163,6 +184,11 @@ Row(
 children: [
 const Text('Revenue', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w600)),
 const Spacer(),
+IconButton(
+tooltip: 'Bagikan PDF (WhatsApp, dll)',
+onPressed: () => _sharePdf(d, exp),
+icon: const Icon(Icons.picture_as_pdf_rounded, color: Colors.white, size: 20),
+),
 IconButton(
 tooltip: 'Copy summary',
 onPressed: () => _copy(d, exp),

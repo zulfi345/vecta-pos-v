@@ -43,6 +43,8 @@ dependencies:
   sqflite_common_ffi: ^2.3.3
   shared_preferences: ^2.3.5
   permission_handler: ^12.0.1
+  pdf: ^3.11.3
+  share_plus: ^11.0.0
   unified_esc_pos_printer: ^3.0.0
 
 dev_dependencies:

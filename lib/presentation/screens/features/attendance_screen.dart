@@ -1,7 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart' hide Text;
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/i18n/app_lang.dart';
 import '../../../core/i18n/tr_text.dart';
+import '../../../core/services/report/report_pdf_service.dart';
 import '../../../core/store/record_store.dart';
 import '../../widgets/ui_kit.dart';
 class AttendanceScreen extends ConsumerWidget {
@@ -12,7 +19,84 @@ if (a['empId'] == empId && a['date'] == day) return a;
 }
 return null;
 }
-Future<void> _mark(WidgetRef ref, Rec emp, Rec? cur, String action) async {
+Future<bool> _verifyPin(BuildContext context, Rec emp) async {
+final pin = '${emp['pin'] ?? ''}';
+if (pin.isEmpty) {
+ScaffoldMessenger.of(context).showSnackBar(
+SnackBar(content: Text('PIN ${emp['name']} belum diatur. Atur di Employee Management.')),
+);
+return false;
+}
+final ctrl = TextEditingController();
+final ok = await showDialog<bool>(
+context: context,
+builder: (ctx) {
+String? err;
+return StatefulBuilder(
+builder: (ctx, setS) => AlertDialog(
+title: Text('PIN ${emp['name']}'),
+content: TextField(
+controller: ctrl,
+autofocus: true,
+obscureText: true,
+maxLength: 6,
+keyboardType: TextInputType.number,
+inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+decoration: InputDecoration(labelText: 'Masukkan PIN', errorText: err),
+),
+actions: [
+TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: const Text('Batal')),
+FilledButton(
+onPressed: () {
+if (ctrl.text == pin) {
+Navigator.of(ctx).pop(true);
+} else {
+setS(() => err = 'PIN salah');
+}
+},
+child: const Text('OK'),
+),
+],
+),
+);
+},
+);
+ctrl.dispose();
+return ok == true;
+}
+
+/// Ambil selfie (kamera depan) dan simpan permanen di folder aplikasi.
+Future<String?> _takeSelfie() async {
+try {
+final shot = await ImagePicker().pickImage(
+source: ImageSource.camera,
+preferredCameraDevice: CameraDevice.front,
+imageQuality: 40,
+maxWidth: 720,
+);
+if (shot == null) return null;
+final dir = await getApplicationDocumentsDirectory();
+final folder = Directory(p.join(dir.path, 'attendance'));
+if (!await folder.exists()) await folder.create(recursive: true);
+final dest = p.join(folder.path, 'selfie_${DateTime.now().microsecondsSinceEpoch}.jpg');
+await File(shot.path).copy(dest);
+return dest;
+} catch (_) {
+return null;
+}
+}
+
+Future<void> _mark(BuildContext context, WidgetRef ref, Rec emp, Rec? cur, String action) async {
+final messenger = ScaffoldMessenger.of(context);
+if (!await _verifyPin(context, emp)) return;
+String? photo;
+if (action != 'leave') {
+photo = await _takeSelfie();
+if (photo == null) {
+messenger.showSnackBar(const SnackBar(content: Text('Selfie wajib untuk absen.')));
+return;
+}
+}
 final now = DateTime.now();
 final rec = <String, dynamic>{...?cur};
 rec['empId'] = emp['id'];
@@ -21,15 +105,63 @@ rec['date'] = ymd(now);
 if (action == 'in') {
 rec['status'] = 'present';
 rec['inAt'] = now.toIso8601String();
+rec['inPhoto'] = photo;
 } else if (action == 'out') {
 rec['outAt'] = now.toIso8601String();
+rec['outPhoto'] = photo;
 } else {
 rec['status'] = 'leave';
 rec.remove('inAt');
 rec.remove('outAt');
+rec.remove('inPhoto');
+rec.remove('outPhoto');
 }
 await ref.read(attendanceProvider.notifier).upsert(rec);
 }
+
+Future<void> _sharePdf(BuildContext context, WidgetRef ref) async {
+final messenger = ScaffoldMessenger.of(context);
+try {
+final now = DateTime.now();
+final file = await ReportPdfService.attendanceReport(
+month: DateTime(now.year, now.month, 1),
+employees: ref.read(employeesProvider),
+attendance: ref.read(attendanceProvider),
+);
+await ReportPdfService.share(file, text: 'Rekap absensi ${now.month}/${now.year}');
+} catch (e) {
+messenger.showSnackBar(SnackBar(content: Text('Gagal membuat PDF: $e')));
+}
+}
+
+void _showPhotos(BuildContext context, Rec a) {
+final paths = [
+for (final k in ['inPhoto', 'outPhoto'])
+if (a[k] != null && File('${a[k]}').existsSync()) MapEntry(k == 'inPhoto' ? 'Masuk' : 'Pulang', '${a[k]}'),
+];
+if (paths.isEmpty) return;
+showDialog<void>(
+context: context,
+builder: (ctx) => AlertDialog(
+title: Text('${a['empName']} • ${a['date']}'),
+content: SingleChildScrollView(
+child: Column(
+mainAxisSize: MainAxisSize.min,
+children: [
+for (final e in paths) ...[
+Text(e.key, style: const TextStyle(fontWeight: FontWeight.w700)),
+const SizedBox(height: 6),
+ClipRRect(borderRadius: BorderRadius.circular(10), child: Image.file(File(e.value))),
+const SizedBox(height: 12),
+],
+],
+),
+),
+actions: [TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text('Tutup'))],
+),
+);
+}
+
 String _duration(Rec a) {
 final i = DateTime.tryParse('${a['inAt'] ?? ''}');
 final o = DateTime.tryParse('${a['outAt'] ?? ''}');
@@ -51,7 +183,16 @@ final a = _today(att, '${e['id']}', day);
 if (a != null && a['status'] == 'present') present++;
 }
 return Scaffold(
-appBar: AppBar(title: const Text('Attendance')),
+appBar: AppBar(
+title: const Text('Attendance'),
+actions: [
+IconButton(
+tooltip: 'Bagikan rekap PDF (WhatsApp, dll)',
+onPressed: () => _sharePdf(context, ref),
+icon: const Icon(Icons.picture_as_pdf_rounded),
+),
+],
+),
 body: ListView(
 padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
 children: [
@@ -131,7 +272,7 @@ Row(
 children: [
 Expanded(
 child: FilledButton.tonalIcon(
-onPressed: hasIn ? null : () => _mark(ref, e, a, 'in'),
+onPressed: hasIn ? null : () => _mark(context, ref, e, a, 'in'),
 icon: const Icon(Icons.login_rounded, size: 18),
 label: const Text('Check In'),
 ),
@@ -139,7 +280,7 @@ label: const Text('Check In'),
 const SizedBox(width: 8),
 Expanded(
 child: FilledButton.tonalIcon(
-onPressed: (!hasIn || hasOut) ? null : () => _mark(ref, e, a, 'out'),
+onPressed: (!hasIn || hasOut) ? null : () => _mark(context, ref, e, a, 'out'),
 icon: const Icon(Icons.logout_rounded, size: 18),
 label: const Text('Check Out'),
 ),
@@ -147,7 +288,7 @@ label: const Text('Check Out'),
 const SizedBox(width: 8),
 IconButton.outlined(
 tooltip: 'On Leave / Sick',
-onPressed: hasIn ? null : () => _mark(ref, e, a, 'leave'),
+onPressed: hasIn ? null : () => _mark(context, ref, e, a, 'leave'),
 icon: const Icon(Icons.healing_rounded, size: 18),
 ),
 ],
@@ -165,6 +306,8 @@ else
 for (final a in history.take(40))
 Padding(
 padding: const EdgeInsets.only(bottom: 8),
+child: InkWell(
+onTap: () => _showPhotos(context, a),
 child: SectionCard(
 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
 child: Row(
@@ -189,6 +332,7 @@ color: a['status'] == 'leave' ? Colors.orange : Colors.green,
 ),
 ),
 ],
+),
 ),
 ),
 ),
