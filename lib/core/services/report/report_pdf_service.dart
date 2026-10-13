@@ -6,9 +6,9 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:share_plus/share_plus.dart';
 
 import '../../../features/reports/report_calc.dart';
+import '../../store/record_store.dart' show Rec;
 import '../../utilities/currency_formatter.dart';
 
-typedef Rec = Map<String, dynamic>;
 
 /// Membuat laporan PDF (penjualan & absensi) dan membagikannya
 /// lewat menu share Android/iOS (WhatsApp, email, simpan, dll).
