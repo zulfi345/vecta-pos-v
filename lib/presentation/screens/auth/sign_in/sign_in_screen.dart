@@ -8,6 +8,7 @@ import 'package:vecta_pos/core/i18n/tr_text.dart';
 import '../../../../app/di/app_providers.dart';
 import '../../../../core/assets/assets.dart';
 import '../../../../core/themes/app_sizes.dart';
+import '../../../../core/utilities/support_contact.dart';
 import '../../../providers/auth/auth_notifier.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/app_dialog.dart';
@@ -144,6 +145,17 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   onPressed: () => _setMode(isRegister ? _Mode.owner : _Mode.register),
                   child: Text(isRegister ? 'Sudah punya akun? Masuk' : 'Daftar owner baru'),
                 ),
+              const SizedBox(height: 4),
+              TextButton.icon(
+                onPressed: () => SupportContact.openWhatsApp(
+                  context,
+                  message: _email.text.trim().isEmpty
+                      ? 'Halo, saya butuh bantuan Vecta POS.'
+                      : 'Halo, saya butuh bantuan Vecta POS. Email akun: ${_email.text.trim()}',
+                ),
+                icon: const Icon(Icons.support_agent_rounded),
+                label: Text('Bantuan WhatsApp: ${SupportContact.display}'),
+              ),
             ],
           ),
         ),

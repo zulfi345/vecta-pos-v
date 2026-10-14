@@ -4,6 +4,7 @@ import '../../../app/di/app_providers.dart';
 import '../../../core/i18n/app_lang.dart';
 import '../../providers/main/main_notifier.dart';
 import '../welcome/welcome_screen.dart';
+import '../../widgets/expiry_banner.dart';
 class MainScreen extends ConsumerStatefulWidget {
 final Widget child;
 const MainScreen({
@@ -40,7 +41,11 @@ throw Exception(
 }
 return Scaffold(
 body: widget.child,
-bottomNavigationBar: NavigationBar(
+bottomNavigationBar: Column(
+mainAxisSize: MainAxisSize.min,
+children: [
+const ExpiryBanner(),
+NavigationBar(
 selectedIndex: _calculateSelectedIndex(),
 onDestinationSelected: _onItemTapped,
 height: 66,
@@ -73,6 +78,7 @@ label: tr('Account'),
 ),
 ],
 ),
+]),
 );
 }
 int _calculateSelectedIndex() {

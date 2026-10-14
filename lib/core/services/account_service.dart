@@ -120,6 +120,12 @@ class AccountService {
     await _prefs.setInt(_kVerifiedAt, DateTime.now().millisecondsSinceEpoch);
   }
 
+  /// Masa aktif terakhir yang tersimpan (null bila belum ada).
+  DateTime? get savedExpiry {
+    final raw = _prefs.getString(_kExpiredAt);
+    return raw == null ? null : DateTime.tryParse(raw);
+  }
+
   /// True jika masa aktif tersimpan masih berlaku dan jam HP tidak dimundurkan.
   bool isCacheValid() {
     final raw = _prefs.getString(_kExpiredAt);
