@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/i18n/app_lang.dart';
 import '../../../core/i18n/tr_text.dart';
+import '../../../core/utilities/support_contact.dart';
 import '../../widgets/ui_kit.dart';
 
 /// Langganan: lihat masa aktif, buat tagihan, bayar lewat QR DANA, lalu menunggu
@@ -156,6 +157,19 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       _claimed = false;
       _paid = false;
     });
+  }
+
+  /// Buka WhatsApp developer dengan pesan berisi kode tagihan (unik per transaksi).
+  /// Foto bukti bayar dilampirkan sendiri oleh owner di chat WhatsApp.
+  Future<void> _sendProof(String code, int amount, Map<String, dynamic> inv) async {
+    final email = _db.auth.currentUser?.email ?? '-';
+    final msg = 'Halo, saya sudah bayar langganan Vecta POS.\n'
+        'Kode tagihan: $code\n'
+        'Paket: ${inv['devices']} HP x ${inv['months']} bulan\n'
+        'Nominal: ${rp(amount)}\n'
+        'Email akun: $email\n'
+        'Bukti bayar saya lampirkan di chat ini.';
+    await SupportContact.openWhatsApp(context, message: msg);
   }
 
   String _statusLabel(String s, bool expired) {
@@ -375,7 +389,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             Text('1. Bayar ${rp(amount)} lewat QR DANA di atas.'),
             Text('2. Tulis kode $code di kolom catatan / pesan.'),
             const Text('3. Tekan "Saya sudah bayar" di bawah.'),
-            const Text('4. Tunggu admin mengaktifkan. Halaman ini otomatis berubah.'),
+            const Text('4. Tekan "Kirim bukti ke WhatsApp", lalu lampirkan foto bukti bayar.'),
+            const Text('5. Tunggu admin mengaktifkan. Halaman ini otomatis berubah.'),
             const SizedBox(height: 6),
             Text(
               'Tagihan tidak bisa diubah. Mengurangi jumlah HP setelah tagihan dibuat tidak mengurangi nominal.',
@@ -389,6 +404,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         label: _claimed ? 'Menunggu admin mengecek...' : (_busy ? 'Mengirim...' : 'Saya sudah bayar'),
         icon: _claimed ? Icons.hourglass_top_rounded : Icons.check_circle_rounded,
         onTap: (_claimed || _busy) ? null : _claim,
+      ),
+      const SizedBox(height: 8),
+      OutlinedButton.icon(
+        onPressed: () => _sendProof(code, amount, inv),
+        icon: const Icon(Icons.send_rounded),
+        label: const Text('Kirim bukti ke WhatsApp'),
       ),
       const SizedBox(height: 8),
       TextButton(onPressed: _newInvoice, child: const Text('Ubah jumlah / buat tagihan baru')),
